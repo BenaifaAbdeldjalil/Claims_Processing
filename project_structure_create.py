@@ -70,7 +70,8 @@ files = [
 
     "notebooks/claims_analysis.ipynb",
 
-    "docs/guide.md"
+    "docs/guide.md",
+    "docs/full_scripts.md"
 ]
 
 # Création du dossier principal
