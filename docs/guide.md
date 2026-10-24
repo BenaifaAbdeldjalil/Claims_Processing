@@ -1,4 +1,4 @@
-Here is the complete project in English, using the free **Claims Processing Insights API** from `databasesample.com` as the main data source.
+Here is the complete project, using the free **Claims Processing Insights API** from `databasesample.com` as the main data source.
 
 ## 1. Business Need and Objectives
 
