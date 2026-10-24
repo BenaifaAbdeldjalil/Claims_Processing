@@ -100,10 +100,12 @@ mutuelle-api-project/
 │   ├── extract_files.py
 │   ├── load_bronze.py
 │   ├── transform_silver.py
-│   ├── build_gold.py
 │   ├── historisation.py
 │   ├── run_quality_checks.py
-│   └── run_pipeline.py
+│   ├── run_pipeline.py
+│   ├── build_bronze.py
+│   ├── build_silver.py
+│   └── build_gold.py
 │
 ├── tests/
 │   └── test_data_quality.py
@@ -589,7 +591,7 @@ def extract_domain(domain: str) -> pd.DataFrame:
 ```
 
 ## 10. Load Data into Bronze
-
+### `scripts/build_bronze.py` 
 ### `scripts/load_bronze.py`
 
 ```python
@@ -771,7 +773,6 @@ ORDER BY bronze_id;
 ```
 
 ## 11. Transform Bronze into Silver
-
 ### `scripts/transform_silver.py`
 
 The mapping is centralized. If the API uses slightly different column names, update only `COLUMN_MAPPING`.
@@ -1015,7 +1016,6 @@ python scripts/transform_silver.py
 ```
 
 ## 12. Data Quality Checks
-
 ### `scripts/run_quality_checks.py`
 
 ```python
@@ -1246,7 +1246,6 @@ pytest tests/test_data_quality.py -v
 ```
 
 ## 13. Build the Gold Layer
-
 ### `scripts/build_gold.py`
 
 ```python
