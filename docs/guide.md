@@ -148,11 +148,15 @@ pytest
 Create `config/.env`:
 
 ```env
-PG_HOST=localhost
-PG_PORT=5432
-PG_DB=mutuelle_db
-PG_USER=postgres
-PG_PASSWORD=your_password
+PG_ADMIN_HOST=localhost
+PG_ADMIN_PORT=5432
+PG_ADMIN_USER=xxxx
+PG_ADMIN_PASSWORD=xxxx
+
+PG_DB=xxxx
+PG_USER=xxx
+PG_PASSWORD=xxxx
+
 ```
 
 Create the PostgreSQL database:
