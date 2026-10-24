@@ -84,13 +84,17 @@ mutuelle-api-project/
 │   └── logs/
 │
 ├── sql/
-│   ├── 01_create_schemas.sql
-│   ├── 02_create_bronze.sql
-│   ├── 03_create_silver.sql
-│   ├── 04_create_gold.sql
+│   ├── 01_1_create_role.sql
+│   ├── 01_2_create_database.sql
+│   ├── 01_3_grante_role.sql
+│   ├── 01_4_create_schema.sql
+│   ├── 02_create_bronze_tables.sql
+│   ├── 03_create_silver_tables.sql
+│   ├── 04_create_gold_tables.sql
 │   └── 05_create_gold_views.sql
 │
 ├── scripts/
+│   ├── setup_postgresql.py
 │   ├── config.py
 │   ├── extract_api.py
 │   ├── extract_files.py
