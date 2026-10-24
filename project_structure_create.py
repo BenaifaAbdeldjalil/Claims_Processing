@@ -25,6 +25,7 @@ folders = [
     "sql/gold",
 
     "scripts",
+    "docs",
     "tests",
     "notebooks",
 ]
@@ -68,6 +69,8 @@ files = [
     "tests/test_data_quality.py",
 
     "notebooks/claims_analysis.ipynb",
+
+    "docs/guide.md"
 ]
 
 # Création du dossier principal
