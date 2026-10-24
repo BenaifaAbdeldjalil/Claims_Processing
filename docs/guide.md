@@ -163,22 +163,19 @@ PG_PASSWORD=xxxx
 
 ```
 
-Create the PostgreSQL database:
-
-```sql
-CREATE DATABASE mutuelle_db;
+Setup the envirenement:
+```python
+setup_postgresql.py
 ```
+###
+He take : 
+│   ├── 01_1_create_role.sql
+│   ├── 01_2_create_database.sql
+│   ├── 01_3_grante_role.sql
+│   ├── 01_4_create_schema.sql
+###
 
 ## 6. SQL Scripts
-
-### `sql/01_create_schemas.sql`
-
-```sql
-CREATE SCHEMA IF NOT EXISTS bronze;
-CREATE SCHEMA IF NOT EXISTS silver;
-CREATE SCHEMA IF NOT EXISTS gold;
-```
-
 ### `sql/02_create_bronze.sql`
 
 ```sql
@@ -597,14 +594,48 @@ def extract_domain(domain: str) -> pd.DataFrame:
 
 ```python
 import json
+import math
 from datetime import datetime
 
+import numpy as np
 import pandas as pd
 
 from config import BRONZE_DIR, DOMAINS, engine
 from extract_api import extract_all_domains
 from extract_files import extract_domain
 
+def sanitize_value(v):
+    if isinstance(v, dict):
+        return {k: sanitize_value(x) for k, x in v.items()}
+    if isinstance(v, (list, tuple)):
+        return [sanitize_value(x) for x in v]
+    if isinstance(v, str):
+        # Tenter de parser comme JSON
+        s = v.strip()
+        if s.startswith(("{", "[")):
+            try:
+                parsed = json.loads(s)
+                cleaned = sanitize_value(parsed)
+                return json.dumps(cleaned, ensure_ascii=False, default=str, allow_nan=False)
+            except (json.JSONDecodeError, ValueError):
+                # Remplacement brut des NaN dans la chaîne
+                return s.replace(": NaN", ": null").replace(":NaN", ":null").replace("[NaN", "[null")
+        return v
+    # Détection NaN/NA/NaT
+    try:
+        if pd.isna(v):
+            return None
+    except (TypeError, ValueError):
+        pass
+    if isinstance(v, (float, np.floating)):
+        if math.isnan(v) or math.isinf(v):
+            return None
+        return float(v)
+    if isinstance(v, np.integer):
+        return int(v)
+    if isinstance(v, np.bool_):
+        return bool(v)
+    return v
 
 def save_bronze_file(
     df: pd.DataFrame,
@@ -618,7 +649,10 @@ def save_bronze_file(
     timestamp = datetime.now().strftime("%Y%m%d_%H%M%S")
     output_path = domain_dir / f"{domain}_{source_type}_{timestamp}.json"
 
-    df.to_json(
+    clean_df = df.copy()
+    clean_df = clean_df.map(sanitize_value)
+
+    clean_df.to_json(
         output_path,
         orient="records",
         force_ascii=False,
@@ -634,11 +668,11 @@ def load_to_bronze_table(
     source_system: str,
     source_endpoint: str,
 ):
-    """Load each raw record into bronze.<domain> as JSONB."""
+    """Load each raw record into mutuelle_bronze.<domain> as JSONB."""
     records = []
 
     for _, row in df.iterrows():
-        raw_record = row.to_dict()
+        raw_record = sanitize_value(row.to_dict())
 
         records.append(
             {
@@ -648,6 +682,7 @@ def load_to_bronze_table(
                     raw_record,
                     ensure_ascii=False,
                     default=str,
+                    allow_nan=False,
                 ),
             }
         )
@@ -655,8 +690,9 @@ def load_to_bronze_table(
     bronze_df = pd.DataFrame(records)
 
     bronze_df.to_sql(
-        f"bronze.{domain}",
-        engine,
+        name=domain,
+        con=engine,
+        schema="mutuelle_bronze",
         if_exists="append",
         index=False,
     )
@@ -712,6 +748,8 @@ def run_bronze_load():
 
 if __name__ == "__main__":
     run_bronze_load()
+
+
 ```
 
 Run it:
