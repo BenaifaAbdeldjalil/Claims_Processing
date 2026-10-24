@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS bronze.adherents (
+CREATE TABLE IF NOT EXISTS mutuelle_bronze.adherents (
     bronze_id BIGSERIAL PRIMARY KEY,
     source_system VARCHAR(100),
     source_endpoint VARCHAR(255),
@@ -6,7 +6,7 @@ CREATE TABLE IF NOT EXISTS bronze.adherents (
     raw_data JSONB NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS bronze.contrats (
+CREATE TABLE IF NOT EXISTS mutuelle_bronze.contrats (
     bronze_id BIGSERIAL PRIMARY KEY,
     source_system VARCHAR(100),
     source_endpoint VARCHAR(255),
@@ -14,7 +14,7 @@ CREATE TABLE IF NOT EXISTS bronze.contrats (
     raw_data JSONB NOT NULL
 );
 
-CREATE TABLE IF NOT EXISTS bronze.sinistres (
+CREATE TABLE IF NOT EXISTS mutuelle_bronze.sinistres (
     bronze_id BIGSERIAL PRIMARY KEY,
     source_system VARCHAR(100),
     source_endpoint VARCHAR(255),
