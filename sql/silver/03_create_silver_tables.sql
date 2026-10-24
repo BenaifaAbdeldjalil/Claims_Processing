@@ -1,4 +1,4 @@
-CREATE TABLE IF NOT EXISTS silver.adherents (
+CREATE TABLE IF NOT EXISTS mutuelle_silver.adherents (
     id_adherent VARCHAR(50) PRIMARY KEY,
     last_name VARCHAR(100),
     first_name VARCHAR(100),
@@ -11,7 +11,7 @@ CREATE TABLE IF NOT EXISTS silver.adherents (
     loaded_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS silver.contrats (
+CREATE TABLE IF NOT EXISTS mutuelle_silver.contrats (
     id_contrat VARCHAR(50) PRIMARY KEY,
     id_adherent VARCHAR(50),
     plan_type VARCHAR(100),
@@ -23,7 +23,7 @@ CREATE TABLE IF NOT EXISTS silver.contrats (
     loaded_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS silver.sinistres (
+CREATE TABLE IF NOT EXISTS mutuelle_silver.sinistres (
     id_sinistre VARCHAR(50) PRIMARY KEY,
     id_contrat VARCHAR(50),
     id_adherent VARCHAR(50),
@@ -37,7 +37,7 @@ CREATE TABLE IF NOT EXISTS silver.sinistres (
     loaded_at TIMESTAMP NOT NULL DEFAULT NOW()
 );
 
-CREATE TABLE IF NOT EXISTS silver.contrats_history (
+CREATE TABLE IF NOT EXISTS mutuelle_silver.contrats_history (
     history_id BIGSERIAL PRIMARY KEY,
     id_contrat VARCHAR(50) NOT NULL,
     id_adherent VARCHAR(50),
@@ -52,7 +52,7 @@ CREATE TABLE IF NOT EXISTS silver.contrats_history (
 );
 
 CREATE INDEX IF NOT EXISTS idx_contrats_history_id
-ON silver.contrats_history (id_contrat);
+ON mutuelle_silver.contrats_history (id_contrat);
 
 CREATE INDEX IF NOT EXISTS idx_contrats_history_current
-ON silver.contrats_history (id_contrat, is_current);
+ON mutuelle_silver.contrats_history (id_contrat, is_current);
